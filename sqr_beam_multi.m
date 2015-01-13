@@ -33,3 +33,10 @@ x2=-L2/2:dx2:L2/2-dx2; %obs ords
 y2=x2;
 I2=abs(u2.^2);
 figure,imagesc(x2,y2,nthroot(I2,3));%stretch image contrast
+xlabel('x (m)'); ylabel('y (m)');
+title('z= 2000 m');
+figure,plot(x2,I2(round(size(I2,2)/2),:),'-');
+axis([-0.6 0.6 0 max(I2(round(size(I2,2)/2),:))+0.1])
+grid on;
+xlabel('x (m)'); ylabel('Irradiance');
+title('z= 2000 m');
