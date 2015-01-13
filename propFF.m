@@ -17,6 +17,6 @@ dx2=lambda*z/L1; %obs sample interval
 x2=-L2/2:dx2:L2/2-dx2; %obs coords
 [X2,Y2]=meshgrid(x2,x2);
  %
- c=1/(j*lambda*z)*exp(j*k/(2*z)*(X2.^2+Y2.^2));
- u2=c.*ifftshift(fft2(fftshift(u1)))*dx1^2;
+ c=exp(j*k*z)/(j*lambda*z)*exp(j*k/(2*z)*(X2.^2+Y2.^2));
+ u2=c.*ifftshift(fft2(fftshift(u1)));
  end
