@@ -14,7 +14,9 @@ deltad=0.015;
 r=deltad-0.1*deltad;
 
 [X1,Y1]=meshgrid(x1,y1);
-u1=gauss(X1-deltad,Y1-deltad,r)+gauss(X1+deltad,Y1-deltad,r)+gauss(X1+deltad,Y1+deltad,r)+gauss(X1-deltad,Y1+deltad,r);
+for k=0:0.2:1
+    phi=[0,k*2*pi,k*2*pi,0];
+u1=u1dis(phi,X1,Y1,deltad,r,4);
 u1=u1/max(max(u1));
 I1=abs(u1.^2); %src irradiance
 %
@@ -31,9 +33,10 @@ y2=x2;
 I2=abs(u2.^2);
 figure,imagesc(x2,y2,nthroot(I2,3));%stretch image contrast
 xlabel('x (m)'); ylabel('y (m)');
-title('z= 2000 m');
+title(['z=2000m ,',' \phi=',num2str(k*2),'\pi']);
 figure,plot(x2,I2(round(size(I2,2)/2),:),'-');
 axis([-0.6 0.6 0 max(I2(round(size(I2,2)/2),:))+0.1])
 grid on;
 xlabel('x (m)'); ylabel('Irradiance');
-title('z= 2000 m');
+title(['z=2000m ,',' \phi=',num2str(k*2),'\pi']);
+end
