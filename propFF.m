@@ -1,4 +1,4 @@
-function[u2,L2]=propFF(u1,L1,lambda,z);
+ function[u2,L2]=propFF(u1,L1,lambda,z);
  % propagation - Fraunhofer pattern
 % assumes uniform sampling
 % u1 - source plane field

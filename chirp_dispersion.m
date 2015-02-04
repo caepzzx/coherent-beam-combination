@@ -3,7 +3,7 @@
 clear                    %清除内存
 clc                      %清屏
 A0=1;                    %振幅归一化
-lambda=800e-9;           %光波长选择800nm
+lambda=1030e-9;           %光波长选择800nm
 c=3e8;                   %光速
 w0=2*pi*c/lambda;        %中心角频率
 taup=5*lambda/c;         %脉宽相关量选择为脉冲周期的5倍
