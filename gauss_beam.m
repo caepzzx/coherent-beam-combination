@@ -14,17 +14,17 @@ deltad=0.015;%distance between apertures and center (m)
 r=0.3/2; %aperture (m)
 deltad=r/0.9;
 [X1,Y1]=meshgrid(x1,y1);
-for i=0:0.1:0.5
+for i=0
     for j=0
     phi=[0,i*2*pi,i*2*pi,0];%adjust piston
-u1=u1dis(phi,X1,Y1,deltad,r,2,j*20e-6,0);%src field adjust tip/tilt
-u1=u1/max(max(u1));
-I1=abs(u1.^2); %src irradiance
+    u1=u1dis(phi,X1,Y1,deltad,r,2,j*20e-6,0);%src field adjust tip/tilt
+    u1=u1/max(max(u1));
+    I1=abs(u1.^2); %src irradiance
 
-figure(1),plot(x1,I1(round(size(I1,2)/2),:),'-');
-grid on;
-xlabel('x (m)'); ylabel('Irradiance');
-title('z=0m');
+    figure(1),plot(x1,I1(round(size(I1,2)/2),:),'-');
+    grid on;
+    xlabel('x (m)'); ylabel('Irradiance');
+    title('z=0m');
 
 figure(2)
 imagesc(x1,y1,I1);

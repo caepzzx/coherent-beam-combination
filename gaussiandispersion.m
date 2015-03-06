@@ -1,3 +1,4 @@
+
 phi0=0;phi1=0;phi2=-(13/w0).^2;      %选择二阶相位量的大小
 alpha=(2*sqrt(log(2))/taup).^2/2;
 beta=1/(2*phi2);

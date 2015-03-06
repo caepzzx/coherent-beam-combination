@@ -1,5 +1,5 @@
 % sqr_beam propagation example
-%
+%multichromatic beam propagation 
 clear all;
 L1=0.5; %side length
 M=250; %number of samples

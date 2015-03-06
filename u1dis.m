@@ -1,7 +1,9 @@
-function u1=u1dis(phi,X1,Y1,deltad,r,N,alphax,alphay,lambda)
-%describe source electrical field  distribution
+function u1=u1dis(phi,X1,Y1,deltad,r,N,alphax,alphay,lambda0)
+%describe object plate field  distribution
 %phi phase vector 4*1
-
+%N(equals 2 OR 4) represent different aperture number
+%lambda0 center wavelength
+%lambda wavelength range vector
 
 
 if nargin < 3
@@ -29,17 +31,18 @@ if nargin<8
 end
 
 if nargin<9
-   lambda=1030*10^-9; %wavelength
+   lambda0=1030*10^-9; %wavelength
 end
 
 switch N
     case 2
-        u1=gauss(X1-deltad,Y1,r).*exp(1i.*phi(1)).*exp(2i*pi./lambda.*(tan(alphax).*(X1-deltad)+tan(alphay).*(Y1)))...
-       +gauss(X1+deltad,Y1,r).*exp(1i.*phi(2)).*exp(2i*pi./lambda.*(tan(alphax).*(X1+deltad)+tan(alphay).*(Y1)));
+        u1=gauss(X1-deltad,Y1,r).*exp(1i.*phi(1)).*exp(2i*pi./lambda0.*(tan(alphax).*(X1-deltad)+tan(alphay).*(Y1)))...
+       +gauss(X1+deltad,Y1,r).*exp(1i.*phi(2)).*exp(2i*pi./lambda0.*(tan(alphax).*(X1+deltad)+tan(alphay).*(Y1)));
     case 4
-    u1=gauss(X1-deltad,Y1+deltad,r)*exp(1i*phi(1))*exp(1i*2*pi/lambda*(tan(alphax)*(X1-deltad)+tan(alphay)*(Y1+deltad)))...
-        +gauss(X1+deltad,Y1+deltad,r)*exp(1i*phi(2))*exp(1i*2*pi/lambda*(tan(alphax)*(X1+deltad)+tan(alphay)*(Y1+deltad)))...
-    +gauss(X1-deltad,Y1-deltad,r)*exp(1i*phi(3))*exp(1i*2*pi/lambda*(tan(alphax)*(X1-deltad)+tan(alphay)*(Y1-deltad)))
-+gauss(X1+deltad,Y1-deltad,r)*exp(1i*phi(4))*exp(1i*2*pi/lambda*(tan(alphax)*(X1+deltad)+tan(alphay)*(Y1-deltad))); 
+    u1=gauss(X1-deltad,Y1+deltad,r)*exp(1i*phi(1))*exp(1i*2*pi/lambda0*(tan(alphax)*(X1-deltad)+tan(alphay)*(Y1+deltad)))...
+        +gauss(X1+deltad,Y1+deltad,r)*exp(1i*phi(2))*exp(1i*2*pi/lambda0*(tan(alphax)*(X1+deltad)+tan(alphay)*(Y1+deltad)))...
+    +gauss(X1-deltad,Y1-deltad,r)*exp(1i*phi(3))*exp(1i*2*pi/lambda0*(tan(alphax)*(X1-deltad)+tan(alphay)*(Y1-deltad)))...
++gauss(X1+deltad,Y1-deltad,r)*exp(1i*phi(4))*exp(1i*2*pi/lambda0*(tan(alphax)*(X1+deltad)+tan(alphay)*(Y1-deltad))); 
+end
 end
 
