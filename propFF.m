@@ -18,5 +18,5 @@ x2=-L2/2:dx2:L2/2-dx2; %obs coords
 [X2,Y2]=meshgrid(x2,x2);
  %
  c=exp(1i*k*z)/(1i*lambda*z)*exp(1i*k/(2*z)*(X2.^2+Y2.^2));
- u2=ifftshift(fft2(fftshift(u1)));
+ u2=c.*ifftshift(fft2(fftshift(u1)));
  end
