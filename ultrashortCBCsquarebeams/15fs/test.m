@@ -1,5 +1,6 @@
-u2=zeros(numel(-L1(1)/2:dx1(1):L1(1)/2-dx1(1)),numel(-L1(1)/2:dx1(1):L1(1)/2-dx1(1)),numel(1:61));
-for k=1:61;
+u2=zeros(numel(-L1(1)/2:dx1(1):L1(1)/2-dx1(1)),numel(-L1(1)/2:dx1(1):L1(1)/2-dx1(1)),numel(1:4:61));
+figure
+for k=4:4:61;
 x1=-L1(k)/2:dx1(k):L1(k)/2-dx1(k);%src coords
 y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
@@ -21,7 +22,8 @@ plot(y2,(I2t(:,round(size(I2,2)/2))+I2t(:,round(size(I2,2)/2)+1)/2));
 hold on
 end
 I2=abs(sum(u2,3).^2);
-hold on
-plot(y2,(I2(:,round(size(I2,2)/2))+I2(:,round(size(I2,2)/2)+1)/2),'-.','linewidth',2);
+hold off
+figure,plot(y2,(I2(:,round(size(I2,2)/2))+I2(:,round(size(I2,2)/2)+1)/2),'-.','linewidth',2);
+
 
 
