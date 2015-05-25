@@ -8,7 +8,7 @@ duration=15e-15;%transform bandwidth in various units
 deltav=0.5/duration;
 deltalambdainv=deltav/3e8;
 deltalambda=lambda0^2*deltalambdainv;
-lambda=(lambda0-deltalambda/2*1.2):(2e-9):(lambda0+deltalambda/2*1.2);
+lambda=(lambda0-deltalambda/2*1.2):(deltalambda/120):(lambda0+deltalambda/2*1.2);
 fluctuation=cos(2*pi*lambda*1e-3)+randn(size(lambda))*0.5e-1;
 l=10;
 spectrum=exp(-((lambda-lambda0)/(deltalambda/2)).^(2*l)).*fluctuation;
@@ -20,7 +20,7 @@ deltad=10e-3;%spatial interval between two beams
 didx=1;%index difference for lambda
 
 c=1/lambda0;%scale for different wavelength coordinate
-M=36;
+M=50;
 L=150e-3;
 z=2;
 dx=L/M;
@@ -77,17 +77,17 @@ y2=x2;
 I2=abs(sum(u2,3).^2);
 figure,imagesc(x2,y2,nthroot(I2,3));
 %% find x-direction and y-direction diffraction limit
-[pks1,locs1]=findpeaks(-I2(round(size(I2,1)/2),:));
-plot(x2,(I2(round(size(I2,1)/2),:)+I2(round(size(I2,1)/2)+1,:))/2,'r');
+[pks1,locs1]=findpeaks(-I2(round(size(I2,1)/2),:),x2);
+plot(x2,(I2(round(size(I2,1)/2),:)+I2(round(size(I2,1)/2)+1,:))/2);
 hold on
 % plot(locs1,-pks1,'*');
-rdlx=min(abs(x2(locs1)));%radius of diffraction limit
+rdlx=min(abs(locs1));%radius of diffraction limit
 
-[pks2,locs2]=findpeaks(-I2(:,round(size(I2,2)/2)));
-plot(y2,(I2(:,round(size(I2,2)/2))+I2(:,round(size(I2,2)/2)+1)/2),'g');
+[pks2,locs2]=findpeaks(-I2(:,round(size(I2,2)/2)),y2);
+plot(y2,(I2(:,round(size(I2,2)/2))+I2(:,round(size(I2,2)/2)+1)/2));
 % hold on
 % plot(locs2,-pks2,'*');
-rdly=min(abs(y2(locs2)));%radius of diffraction limit
+rdly=min(abs(locs2));%radius of diffraction limit
 legend('x-direction intensity','y-direction intensity');
 
 %% calculate max intensity and energy in diffraction limit 
@@ -95,7 +95,7 @@ maxI2=max(max(I2));%maxium of irridiance for in-phase mode
 maxdlenergy=dlenergy(I2,rdlx,rdly,X2,Y2);
 
 %% wave error same for two beams
-filepath='D:\CBC\Wavefront20150513\15fs\parsame';
+filepath='E:\Wavefront20150513\15fs\parsame';
 for scale=0.05:0.01:1.2;%scale factor for different wavefront
     Numofpoint=50;%Num of calcultaed point for a scale
     para_same(Numofpoint)=struct('SR',[],'SRdl',[],'ECdl',[],...
@@ -215,7 +215,7 @@ end
 % system('shutdown -s');
 %% wave error for two beams is different
 Numofpoint=50;%Num of calcultaed point for a scale
-filepath='D:\CBC\Wavefront20150513\15fs\diffwave\';
+filepath='E:\Wavefront20150513\15fs\diffwave\';
 
 para_diff(Numofpoint)=struct('SR',[],'SRdl',[],'ECdl',[],...
     'rof80',[],'PV',[],'RMS',[],'GRMS',[],'GPV',[],'I2',[]);
@@ -339,7 +339,7 @@ save([filepath,'pardiff_',num2str(scale),'.mat'],'para_diff');%save result
 clear u2 para_diff;
 end
 save initialdata2
-system('shutdown -s');
+% system('shutdown -s');
 
 % %% piston error for two beams 
 % filepath='E:\Wavefront20150513\piston\';
