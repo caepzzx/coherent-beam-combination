@@ -1,2 +1,6 @@
 data/
 processed_data/
+*.mat
+*.emf
+*.fig
+*.jpg
