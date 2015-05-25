@@ -14,7 +14,7 @@
 %
 L2=lambda*z/dx1; %obs sidelength
 dx2=lambda*z/L1; %obs sample interval
-x2=-L2/2:dx2:L2/2-dx2; %obs coords
+x2=-L2/2:dx2:L2/2; %obs coords
 [X2,Y2]=meshgrid(x2,x2);
  %
  c=exp(1i*k*z)/(1i*lambda*z)*exp(1i*k/(2*z)*(X2.^2+Y2.^2));

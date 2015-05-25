@@ -24,7 +24,7 @@ M=50;
 L=150e-3;
 z=2;
 dx=L/M;
-x=-L/2:dx:L/2-dx; 
+x=-L/2:dx:L/2; 
 y=x; 
 [X,Y]=meshgrid(x,y);
 
@@ -48,12 +48,12 @@ for sgx=(2:12)*1e-2% phasescreen parameter
     end
 end
 %% diffraction limit far-field intensity
-u2=zeros(numel(-L1(1)/2:dx1(1):L1(1)/2-dx1(1)),numel(-L1(1)/2:dx1(1):L1(1)/2-dx1(1)),numel(1:didx:numel(lambda)));
+u2=zeros(numel(-L1(1)/2:dx1(1):L1(1)/2),numel(-L1(1)/2:dx1(1):L1(1)/2),numel(1:didx:numel(lambda)));
 for k=1:didx:numel(lambda)
 %%coherent beam combination
 %in-phase mode irridance distribution
 
-x1=-L1(k)/2:dx1(k):L1(k)/2-dx1(k);%src coords
+x1=-L1(k)/2:dx1(k):L1(k)/2;%src coords
 y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
 u1=zeros(size(X1));
@@ -71,7 +71,7 @@ I1=abs(u1.*2); %src irradiance
 u2(:,:,k)=u2t;
 end
 dx2=lambda(1)*z/L1(1);
-x2=-L2/2:dx2:L2/2-dx2;%obs ords
+x2=-L2/2:dx2:L2/2;%obs ords
 y2=x2;
 [X2,Y2]=meshgrid(x2,y2);
 I2=abs(sum(u2,3).^2);
