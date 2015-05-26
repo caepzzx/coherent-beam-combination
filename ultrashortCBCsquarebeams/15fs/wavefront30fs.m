@@ -4,11 +4,11 @@ close all
 
 %%initial parameter
 lambda0=910e-9;%central wavelength
-duration=15e-15;%transform bandwidth in various units
+duration=30e-15;%transform bandwidth in various units
 deltav=0.5/duration;
 deltalambdainv=deltav/3e8;
 deltalambda=lambda0^2*deltalambdainv;
-lambda=(lambda0-deltalambda/2*1.2):(deltalambda/50):(lambda0+deltalambda/2*1.2-deltalambda/50);
+lambda=(lambda0-deltalambda/2*1.2):2e-9:(lambda0+deltalambda/2*1.2);
 fluctuation=cos(2*pi*lambda*1e-3)+randn(size(lambda))*0.5e-1;
 l=10;
 spectrum=exp(-((lambda-lambda0)/(deltalambda/2)).^(2*l)).*fluctuation;
@@ -20,11 +20,11 @@ deltad=10e-3;%spatial interval between two beams
 didx=1;%index difference for lambda
 
 c=1/lambda0;%scale for different wavelength coordinate
-M=50;
+M=36;
 L=150e-3;
 z=2;
 dx=L/M;
-x=-L/2:dx:L/2-dx; 
+x=-L/2:dx:L/2; 
 y=x; 
 [X,Y]=meshgrid(x,y);
 
@@ -48,12 +48,12 @@ for sgx=(2:12)*1e-2% phasescreen parameter
     end
 end
 %% diffraction limit far-field intensity
-u2=zeros(numel(-L1(1)/2:dx1(1):L1(1)/2-dx1(1)),numel(-L1(1)/2:dx1(1):L1(1)/2-dx1(1)),numel(1:didx:numel(lambda)));
+u2=zeros(numel(-L1(1)/2:dx1(1):L1(1)/2),numel(-L1(1)/2:dx1(1):L1(1)/2),numel(1:didx:numel(lambda)));
 for k=1:didx:numel(lambda)
 %%coherent beam combination
 %in-phase mode irridance distribution
 
-x1=-L1(k)/2:dx1(k):L1(k)/2-dx1(k);%src coords
+x1=-L1(k)/2:dx1(k):L1(k)/2;%src coords
 y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
 u1=zeros(size(X1));
@@ -71,41 +71,42 @@ I1=abs(u1.*2); %src irradiance
 u2(:,:,k)=u2t;
 end
 dx2=lambda(1)*z/L1(1);
-x2=-L2/2:dx2:L2/2-dx2;%obs ords
+x2=-L2/2:dx2:L2/2;%obs ords
 y2=x2;
 [X2,Y2]=meshgrid(x2,y2);
 I2=abs(sum(u2,3).^2);
 figure,imagesc(x2,y2,nthroot(I2,3));
 %% find x-direction and y-direction diffraction limit
-[pks1,locs1]=findpeaks(-I2(round(size(I2,1)/2),:),x2);
-plot(x2,(I2(round(size(I2,1)/2),:)+I2(round(size(I2,1)/2)+1,:))/2);
+[pks1,locs1]=findpeaks(-I2(round(size(I2,1)/2),:));
+plot(x2,I2(round(size(I2,1)/2),:),'r');
 hold on
 % plot(locs1,-pks1,'*');
-rdlx=min(abs(locs1));%radius of diffraction limit
+rdlx=min(abs(x2(locs1)));%radius of diffraction limit
 
-[pks2,locs2]=findpeaks(-I2(:,round(size(I2,2)/2)),y2);
-plot(y2,(I2(:,round(size(I2,2)/2))+I2(:,round(size(I2,2)/2)+1)/2));
+[pks2,locs2]=findpeaks(-I2(:,round(size(I2,2)/2)));
+plot(y2,I2(:,round(size(I2,2)/2)),'g');
 % hold on
 % plot(locs2,-pks2,'*');
-rdly=min(abs(locs2));%radius of diffraction limit
+rdly=min(abs(y2(locs2)));%radius of diffraction limit
 legend('x-direction intensity','y-direction intensity');
 
 %% calculate max intensity and energy in diffraction limit 
 maxI2=max(max(I2));%maxium of irridiance for in-phase mode
 maxdlenergy=dlenergy(I2,rdlx,rdly,X2,Y2);
-
+save initialdata30fs
 %% wave error same for two beams
-filepath='E:\Wavefront20150513\15fs\parsame';
-for scale=0.05:0.01:1.2;%scale factor for different wavefront
-    Numofpoint=50;%Num of calcultaed point for a scale
+filepath='D:\CBC\Wavefront20150513\30fs\';
+Numofpoint=50;%Num of calcultaed point for a scale
     para_same(Numofpoint)=struct('SR',[],'SRdl',[],'ECdl',[],...
     'rof80',[],'PV',[],'RMS',[],'GRMS',[],'GPV',[],'I2',[]);
+for scale=0.05:0.01:1.2;%scale factor for different wavefront
+    
 for m=1:Numofpoint
     idxphase=floor(rand*size(phi,4))+1;
 %     I2=zeros(size(I2));
 for k=1:didx:numel(lambda)
 %%coherent beam combination
-x1=-L1(k)/2:dx1(k):L1(k)/2-dx1(k);
+x1=-L1(k)/2:dx1(k):L1(k)/2;
 y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
 u1=zeros(size(X1));
@@ -151,7 +152,7 @@ end
     para_same(m).GRMS=rms(rms(grad));
     para_same(m).GPV=peak2peak(peak2peak(grad));
 end
-save([filepath,'_',num2str(scale),'.mat'],'para_same');%save result
+save([filepath,'parsame_',num2str(scale),'.mat'],'para_same');%save result
 clear u2 para_same;
 end
 for scale=0.6:0.02:1.2;%scale factor for different wavefront
@@ -163,7 +164,7 @@ for m=1:Numofpoint
 %     I2=zeros(size(I2));
 for k=1:didx:numel(lambda)
 %%coherent beam combination
-x1=-L1(k)/2:dx1(k):L1(k)/2-dx1(k);
+x1=-L1(k)/2:dx1(k):L1(k)/2;
 y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
 u1=zeros(size(X1));
@@ -209,13 +210,13 @@ end
     para_same(m).GRMS=rms(rms(grad));
     para_same(m).GPV=peak2peak(peak2peak(grad));
 end
-save([filepath,'2_',num2str(scale),'.mat'],'para_same');%save result
+save([filepath,'parsame2_',num2str(scale),'.mat'],'para_same');%save result
 clear u2 para_same;
 end
 % system('shutdown -s');
 %% wave error for two beams is different
 Numofpoint=50;%Num of calcultaed point for a scale
-filepath='E:\Wavefront20150513\15fs\diffwave\';
+filepath='D:\CBC\Wavefront20150513\30fs\diffwave\';
 
 para_diff(Numofpoint)=struct('SR',[],'SRdl',[],'ECdl',[],...
     'rof80',[],'PV',[],'RMS',[],'GRMS',[],'GPV',[],'I2',[]);
@@ -229,7 +230,7 @@ for m=1:Numofpoint
 
 for k=1:didx:numel(lambda)
 %%coherent beam combination
-x1=-L1(k)/2:dx1(k):L1(k)/2-dx1(k);
+x1=-L1(k)/2:dx1(k):L1(k)/2;
 y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
 u1=zeros(size(X1));
@@ -289,7 +290,7 @@ for m=1:Numofpoint
 
 for k=1:didx:numel(lambda)
 %%coherent beam combination
-x1=-L1(k)/2:dx1(k):L1(k)/2-dx1(k);
+x1=-L1(k)/2:dx1(k):L1(k)/2;
 y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
 u1=zeros(size(X1));
@@ -335,10 +336,10 @@ end
     para_diff(m).GRMS=rms(rms(grad));
     para_diff(m).GPV=peak2peak(peak2peak(grad));
 end
-save([filepath,'pardiff_',num2str(scale),'.mat'],'para_diff');%save result
+save([filepath,'pardiff2_',num2str(scale),'.mat'],'para_diff');%save result
 clear u2 para_diff;
 end
-save initialdata2
+save initialdata2_30fs
 % system('shutdown -s');
 
 % %% piston error for two beams 

@@ -4,7 +4,7 @@ close all
 
 %%initial parameter
 lambda0=910e-9;%central wavelength
-duration=15e-15;%transform bandwidth in various units
+duration=20e-15;%transform bandwidth in various units
 deltav=0.5/duration;
 deltalambdainv=deltav/3e8;
 deltalambda=lambda0^2*deltalambdainv;
@@ -93,9 +93,10 @@ legend('x-direction intensity','y-direction intensity');
 %% calculate max intensity and energy in diffraction limit 
 maxI2=max(max(I2));%maxium of irridiance for in-phase mode
 maxdlenergy=dlenergy(I2,rdlx,rdly,X2,Y2);
-save initialdata15fs
+save initialdata20fs
+
 %% wave error same for two beams
-filepath='D:\CBC\Wavefront20150513\15fs\parsame';
+filepath='D:\CBC\Wavefront20150513\20fs\parsame';
 Numofpoint=50;%Num of calcultaed point for a scale
     para_same(Numofpoint)=struct('SR',[],'SRdl',[],'ECdl',[],...
     'rof80',[],'PV',[],'RMS',[],'GRMS',[],'GPV',[],'I2',[]);
@@ -216,7 +217,7 @@ end
 % system('shutdown -s');
 %% wave error for two beams is different
 Numofpoint=50;%Num of calcultaed point for a scale
-filepath='D:\CBC\Wavefront20150513\15fs\diffwave\';
+filepath='D:\CBC\Wavefront20150513\20fs\diffwave\';
 
 para_diff(Numofpoint)=struct('SR',[],'SRdl',[],'ECdl',[],...
     'rof80',[],'PV',[],'RMS',[],'GRMS',[],'GPV',[],'I2',[]);
@@ -339,7 +340,7 @@ end
 save([filepath,'pardiff2_',num2str(scale),'.mat'],'para_diff');%save result
 clear u2 para_diff;
 end
-save initialdata2_15fs
+save initialdata2_20fs
 % system('shutdown -s');
 
 % %% piston error for two beams 
