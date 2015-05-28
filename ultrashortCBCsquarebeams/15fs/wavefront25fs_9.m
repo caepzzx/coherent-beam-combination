@@ -93,7 +93,7 @@ legend('x-direction intensity','y-direction intensity');
 %% calculate max intensity and energy in diffraction limit 
 maxI2=max(max(I2));%maxium of irridiance for in-phase mode
 maxdlenergy=dlenergy(I2,rdlx,rdly,X2,Y2);
-save initialdata25fs_4
+save initialdata25fs
 
 %% wave error same for two beams
 filepath=['D:\CBC\Wavefront20150513\',outfilefolder,'\parsame'];
@@ -225,8 +225,6 @@ for scale=0.05:0.01:1.2;%scale factor for different wavefront
 for m=1:Numofpoint
     idxphase1=floor(rand*size(phi,4))+1;
     idxphase2=floor(rand*size(phi,4))+1;
-    idxphase3=floor(rand*size(phi,4))+1;
-    idxphase4=floor(rand*size(phi,4))+1;
     while idxphase1==idxphase2
         idxphase2=floor(rand*size(phi,4))+1;
     end
@@ -270,15 +268,8 @@ end
 %             rof80y=rof80y+0.15*rof80y;
 %     end
 %     para_diff(m).rof80=[rof80x,rof80y];
-    dphi1=scale*phi(:,:,k,idxphase1)-scale*phi(:,:,k,idxphase2);
-    dphi2=scale*phi(:,:,k,idxphase1)-scale*phi(:,:,k,idxphase3);
-    dphi3=scale*phi(:,:,k,idxphase1)-scale*phi(:,:,k,idxphase4);
-    dphi4=scale*phi(:,:,k,idxphase2)-scale*phi(:,:,k,idxphase3);
-    dphi5=scale*phi(:,:,k,idxphase2)-scale*phi(:,:,k,idxphase4);
-    dphi6=scale*phi(:,:,k,idxphase3)-scale*phi(:,:,k,idxphase4);
-    rmsphi=[rms(rms(dphi1)),rms(rms(dphi2)),rms(rms(dphi3)),rms(rms(dphi4)),rms(rms(dphi5)),rms(rms(dphi6))];
-    [maxrms,maxidx]=max(rmsphi);
-    dphi=eval(['dphi',num2str(maxidx)]);
+    
+    dphi=scale*phi(:,:,k,idxphase1)-scale*phi(:,:,k,idxphase2);
     para_diff(m).PV=peak2peak(peak2peak(dphi)/(2*pi));   %
     para_diff(m).RMS=rms(rms(dphi))/(2*pi);
     [gx,gy] = gradient(dphi/(2*pi),dx1(round(numel(lambda)/2)+1)*1e2);%transform unit
@@ -294,8 +285,6 @@ for scale=0.6:0.02:1.2;%scale factor for different wavefront
 for m=1:Numofpoint
     idxphase1=floor(rand*size(phi,4))+1;
     idxphase2=floor(rand*size(phi,4))+1;
-    idxphase3=floor(rand*size(phi,4))+1;
-    idxphase4=floor(rand*size(phi,4))+1;
     while idxphase1==idxphase2
         idxphase2=floor(rand*size(phi,4))+1;
     end
@@ -339,15 +328,8 @@ end
 %             rof80y=rof80y+0.15*rof80y;
 %     end
 %     para_diff(m).rof80=[rof80x,rof80y];
-    dphi1=scale*phi(:,:,k,idxphase1)-scale*phi(:,:,k,idxphase2);
-    dphi2=scale*phi(:,:,k,idxphase1)-scale*phi(:,:,k,idxphase3);
-    dphi3=scale*phi(:,:,k,idxphase1)-scale*phi(:,:,k,idxphase4);
-    dphi4=scale*phi(:,:,k,idxphase2)-scale*phi(:,:,k,idxphase3);
-    dphi5=scale*phi(:,:,k,idxphase2)-scale*phi(:,:,k,idxphase4);
-    dphi6=scale*phi(:,:,k,idxphase3)-scale*phi(:,:,k,idxphase4);
-    rmsphi=[rms(rms(dphi1)),rms(rms(dphi2)),rms(rms(dphi3)),rms(rms(dphi4)),rms(rms(dphi5)),rms(rms(dphi6))];
-    [maxrms,maxidx]=max(rmsphi);
-    dphi=eval(['dphi',num2str(maxidx)]);
+    
+    dphi=scale*phi(:,:,k,idxphase1)-scale*phi(:,:,k,idxphase2);
     para_diff(m).PV=peak2peak(peak2peak(dphi)/(2*pi));   %
     para_diff(m).RMS=rms(rms(dphi))/(2*pi);
     [gx,gy] = gradient(dphi/(2*pi),dx1(round(numel(lambda)/2)+1)*1e2);%transform unit
@@ -358,7 +340,7 @@ end
 save([filepath,'pardiff2_',num2str(scale),'.mat'],'para_diff');%save result
 clear u2 para_diff;
 end
-save initialdata2_25fs_4
+save initialdata2_25fs
 % system('shutdown -s');
 
 % %% piston error for two beams 
