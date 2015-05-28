@@ -1,7 +1,7 @@
 clear all
 close all
 %%calculate wavefront
-outfilefolder='25fs_4';
+outfilefolder='25fs_9';
 %%initial parameter
 lambda0=910e-9;%central wavelength
 duration=25e-15;%transform bandwidth in various units
@@ -57,8 +57,8 @@ x1=-L1(k)/2:dx1(k):L1(k)/2;%src coords
 y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
 u1=zeros(size(X1));
-u1=setu1_4(0,0,0,0,u1,w,deltad,dx1(k),M,spectrum(k));
-% 
+u1=setu1_9(0,0,0,0,0,0,0,0,0,u1,w,deltad,dx1(k),M,spectrum(k));
+
 % I1=abs(u1.*2); %src irradiance
 % 
 % figure
@@ -93,7 +93,7 @@ legend('x-direction intensity','y-direction intensity');
 %% calculate max intensity and energy in diffraction limit 
 maxI2=max(max(I2));%maxium of irridiance for in-phase mode
 maxdlenergy=dlenergy(I2,rdlx,rdly,X2,Y2);
-save initialdata25fs
+save initialdata25fs_9
 
 %% wave error same for two beams
 filepath=['D:\CBC\Wavefront20150513\',outfilefolder,'\parsame'];
@@ -112,9 +112,10 @@ y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
 u1=zeros(size(X1));
 
+u1=setu1_9(scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase)...
+    ,scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase)...
+    ,scale*phi(:,:,k,idxphase),u1,w,deltad,dx1(k),M,spectrum(k));
 
-u1=setu1_4(scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase)...
-   ,u1,w,deltad,dx1(k),M,spectrum(k));
 % 
 % I1=abs(u1.*2); %src irradiance
 % 
@@ -171,8 +172,10 @@ y1=x1;
 u1=zeros(size(X1));
 
 
-u1=setu1_4(scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase)...
-   ,u1,w,deltad,dx1(k),M,spectrum(k));
+
+u1=setu1_9(scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase)...
+    ,scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase),scale*phi(:,:,k,idxphase)...
+    ,scale*phi(:,:,k,idxphase),u1,w,deltad,dx1(k),M,spectrum(k));
 % 
 % I1=abs(u1.*2); %src irradiance
 % 
@@ -223,11 +226,20 @@ para_diff(Numofpoint)=struct('SR',[],'SRdl',[],'ECdl',[],...
     'rof80',[],'PV',[],'RMS',[],'GRMS',[],'GPV',[],'I2',[]);
 for scale=0.05:0.01:1.2;%scale factor for different wavefront
 for m=1:Numofpoint
-    idxphase1=floor(rand*size(phi,4))+1;
-    idxphase2=floor(rand*size(phi,4))+1;
-    while idxphase1==idxphase2
-        idxphase2=floor(rand*size(phi,4))+1;
+    
+    randnum=floor(rand(1,9)*size(phi,4))+1;
+    while randnum(1)==randnum(2)
+       randnum=floor(rand(1,9)*size(phi,4))+1;
     end
+    idxphase1=randnum(1);
+    idxphase2=randnum(2);
+    idxphase3=randnum(3);
+    idxphase4=randnum(4);
+    idxphase5=randnum(5);
+    idxphase6=randnum(6);
+    idxphase7=randnum(7);
+    idxphase8=randnum(8);
+    idxphase9=randnum(9);
 
 for k=1:didx:numel(lambda)
 %%coherent beam combination
@@ -236,9 +248,11 @@ y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
 u1=zeros(size(X1));
 
+u1=setu1_9(scale*phi(:,:,k,idxphase1),scale*phi(:,:,k,idxphase2),scale*phi(:,:,k,idxphase3),scale*phi(:,:,k,idxphase4...
+    ,scale*phi(:,:,k,idxphase5),scale*phi(:,:,k,idxphase6),scale*phi(:,:,k,idxphase7),scale*phi(:,:,k,idxphase8)...
+    ,scale*phi(:,:,k,idxphase9),u1,w,deltad,dx1(k),M,spectrum(k));
 
-u1=setu1_4(scale*phi(:,:,k,idxphase1),scale*phi(:,:,k,idxphase2),scale*phi(:,:,k,idxphase3),scale*phi(:,:,k,idxphase4)...
-   ,u1,w,deltad,dx1(k),M,spectrum(k));
+
 % 
 % I1=abs(u1.*2); %src irradiance
 % 
@@ -268,8 +282,21 @@ end
 %             rof80y=rof80y+0.15*rof80y;
 %     end
 %     para_diff(m).rof80=[rof80x,rof80y];
-    
-    dphi=scale*phi(:,:,k,idxphase1)-scale*phi(:,:,k,idxphase2);
+idx=1;
+for i=1:8
+    for j=i+1:9
+         eval(['dphi',num2str(idx),'=scale*phi(:,:,k,idxphase',num2str(i),')-scale*phi(:,:,k,idxphase',num2str(j),');']);
+%          ['dphi',num2str(idx),'=scale*phi(:,:,k,idxphase',num2str(i),')-scale*phi(:,:,k,idxphase',num2str(j),');']
+         idx=idx+1;
+    end
+end
+
+for i=1:36
+ eval(['rmsphi(i)=','rms(rms(dphi',num2str(i),'));']);
+end
+    [maxrms,maxidx]=max(rmsphi);
+    dphi=eval(['dphi',num2str(maxidx)]);
+
     para_diff(m).PV=peak2peak(peak2peak(dphi)/(2*pi));   %
     para_diff(m).RMS=rms(rms(dphi))/(2*pi);
     [gx,gy] = gradient(dphi/(2*pi),dx1(round(numel(lambda)/2)+1)*1e2);%transform unit
@@ -283,11 +310,20 @@ end
 %second time wavefront diff
 for scale=0.6:0.02:1.2;%scale factor for different wavefront
 for m=1:Numofpoint
-    idxphase1=floor(rand*size(phi,4))+1;
-    idxphase2=floor(rand*size(phi,4))+1;
-    while idxphase1==idxphase2
-        idxphase2=floor(rand*size(phi,4))+1;
+    
+    randnum=floor(rand(1,9)*size(phi,4))+1;
+    while randnum(1)==randnum(2)
+       randnum=floor(rand(1,9)*size(phi,4))+1;
     end
+    idxphase1=randnum(1);
+    idxphase2=randnum(2);
+    idxphase3=randnum(3);
+    idxphase4=randnum(4);
+    idxphase5=randnum(5);
+    idxphase6=randnum(6);
+    idxphase7=randnum(7);
+    idxphase8=randnum(8);
+    idxphase9=randnum(9);
 
 for k=1:didx:numel(lambda)
 %%coherent beam combination
@@ -296,9 +332,11 @@ y1=x1;
 [X1,Y1]=meshgrid(x1,y1);
 u1=zeros(size(X1));
 
+u1=setu1_9(scale*phi(:,:,k,idxphase1),scale*phi(:,:,k,idxphase2),scale*phi(:,:,k,idxphase3),scale*phi(:,:,k,idxphase4...
+    ,scale*phi(:,:,k,idxphase5),scale*phi(:,:,k,idxphase6),scale*phi(:,:,k,idxphase7),scale*phi(:,:,k,idxphase8)...
+    ,scale*phi(:,:,k,idxphase9),u1,w,deltad,dx1(k),M,spectrum(k));
 
-u1=setu1_4(scale*phi(:,:,k,idxphase1),scale*phi(:,:,k,idxphase2),scale*phi(:,:,k,idxphase3),scale*phi(:,:,k,idxphase4)...
-   ,u1,w,deltad,dx1(k),M,spectrum(k));
+
 % 
 % I1=abs(u1.*2); %src irradiance
 % 
@@ -328,8 +366,21 @@ end
 %             rof80y=rof80y+0.15*rof80y;
 %     end
 %     para_diff(m).rof80=[rof80x,rof80y];
-    
-    dphi=scale*phi(:,:,k,idxphase1)-scale*phi(:,:,k,idxphase2);
+idx=1;
+for i=1:8
+    for j=i+1:9
+         eval(['dphi',num2str(idx),'=scale*phi(:,:,k,idxphase',num2str(i),')-scale*phi(:,:,k,idxphase',num2str(j),');']);
+%          ['dphi',num2str(idx),'=scale*phi(:,:,k,idxphase',num2str(i),')-scale*phi(:,:,k,idxphase',num2str(j),');']
+         idx=idx+1;
+    end
+end
+
+for i=1:36
+ eval(['rmsphi(i)=','rms(rms(dphi',num2str(i),'));']);
+end
+    [maxrms,maxidx]=max(rmsphi);
+    dphi=eval(['dphi',num2str(maxidx)]);
+
     para_diff(m).PV=peak2peak(peak2peak(dphi)/(2*pi));   %
     para_diff(m).RMS=rms(rms(dphi))/(2*pi);
     [gx,gy] = gradient(dphi/(2*pi),dx1(round(numel(lambda)/2)+1)*1e2);%transform unit
@@ -340,7 +391,7 @@ end
 save([filepath,'pardiff2_',num2str(scale),'.mat'],'para_diff');%save result
 clear u2 para_diff;
 end
-save initialdata2_25fs
+save initialdata2_25fs_9
 % system('shutdown -s');
 
 % %% piston error for two beams 

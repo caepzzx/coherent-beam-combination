@@ -22,12 +22,11 @@ E=E0*supergauss(X,Y,R0,l).*rectbeam(X,Y,w);
 center=[round(size(u1,1)/2),round(size(u1,2)/2)];
 dxc=round(deltad/(2*dx));
 dyc=round(w/(2*dx));
-ybias=dxc+2*dyc;
 u1=zeros(size(u1));
-u1((center(1)-ybias):(center(1)-ybias+M),(center(2)+dxc):(center(2)+dxc+M))=E.*exp(1j.*phi1);
-u1((center(1)-ybias):(center(1)-ybias+M),(center(2)-dxc):-1:(center(2)-dxc-(M)))=E.*exp(1j.*phi2);
-u1((center(1)+ybias):-1:(center(1)+ybias-M),(center(2)+dxc):(center(2)+dxc+M))=E.*exp(1j.*phi3);
-u1((center(1)+ybias):-1:(center(1)+ybias-M),(center(2)-dxc):-1:(center(2)-dxc-(M)))=E.*exp(1j.*phi4);
+u1((center(1)-(dxc+2*dyc)):(center(1)-(dxc+2*dyc)+M),(center(2)+dxc):(center(2)+dxc+M))=E.*exp(1j.*phi1);
+u1((center(1)-(dxc+2*dyc)):(center(1)-(dxc+2*dyc)+M),(center(2)-dxc-2*dyc):(center(2)-dxc-2*dyc+M))=E.*exp(1j.*phi2);
+u1((center(1)+dxc):(center(1)+dxc+M),(center(2)+dxc):(center(2)+dxc+M))=E.*exp(1j.*phi3);
+u1((center(1)+dxc):(center(1)+dxc+M),(center(2)-dxc-2*dyc):(center(2)-dxc-2*dyc+M))=E.*exp(1j.*phi4);
 % u1(((size(u1,1)-M)/2+1):(size(u1,1)-...
 %     ((size(u1,1)-M)/2)),((size(u1,1)-M)/2+1-biasinpixel+1)...
 %     :(size(u1,1)-((size(u1,1)-M)/2)-biasinpixel+1))=E.*exp(1i*phi1);
