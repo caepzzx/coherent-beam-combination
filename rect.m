@@ -1,5 +1,9 @@
-function Y=rect(X)
-Y=zeros(size(X));
-mask=(abs(X)<=0.5);
-Y(mask)=1;
+function[out]=rect(x);
+%
+% rectangle function
+%
+% evaluates rect(x)
+% note: returns odd number of samples for full width
+%
+out=abs(x)<=1/2;
 end
